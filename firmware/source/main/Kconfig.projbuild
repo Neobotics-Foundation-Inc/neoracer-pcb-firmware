@@ -1,0 +1,72 @@
+menu "OSCore USB"
+
+choice OSCORE_USB_BACKEND
+    prompt "USB serial backend"
+    default OSCORE_USB_BACKEND_TINYUSB
+    help
+        Select the USB serial implementation used by the firmware protocol.
+        USB Serial/JTAG keeps the current ESP32-S3 built-in debug CDC path.
+        TinyUSB CDC allows product USB descriptor customization.
+
+    config OSCORE_USB_BACKEND_SERIAL_JTAG
+        bool "ESP32-S3 USB Serial/JTAG"
+
+    config OSCORE_USB_BACKEND_TINYUSB
+        bool "TinyUSB CDC"
+endchoice
+
+config OSCORE_USB_PRODUCT_STRING
+    string "TinyUSB product string"
+    default "Neoracer V1"
+    depends on OSCORE_USB_BACKEND_TINYUSB
+
+config OSCORE_USB_MANUFACTURER_STRING
+    string "TinyUSB manufacturer string"
+    default "Seeed Studio & OSRBOT"
+    depends on OSCORE_USB_BACKEND_TINYUSB
+
+config OSCORE_USB_SERIAL_STRING
+    string "TinyUSB serial string"
+    default "OSRCOREV01"
+    depends on OSCORE_USB_BACKEND_TINYUSB
+
+endmenu
+
+menu "OSCore chassis"
+
+config OSCORE_ENCODER_A_GPIO
+    int "Encoder A GPIO"
+    default 3
+    range 0 48
+
+config OSCORE_ENCODER_B_GPIO
+    int "Encoder B GPIO"
+    default 9
+    range 0 48
+
+config OSCORE_ENCODER_PPR
+    int "Encoder pulses per motor revolution"
+    default 1024
+    range 1 100000
+
+config OSCORE_GEAR_RATIO_MILLI
+    int "Total gear ratio x1000"
+    default 10550
+    range 1 1000000
+    help
+        Total motor-to-wheel gear ratio multiplied by 1000.
+        Example: 10.55 should be configured as 10550.
+
+config OSCORE_WHEEL_RADIUS_UM
+    int "Wheel radius in micrometers"
+    default 42500
+    range 1 1000000
+    help
+        Wheel radius in micrometers. Example: 85 mm diameter uses 42500.
+
+config OSCORE_SPEED_CALC_INTERVAL_MS
+    int "Encoder speed calculation interval in ms"
+    default 20
+    range 1 1000
+
+endmenu
